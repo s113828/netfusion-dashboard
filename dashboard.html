@@ -25,6 +25,26 @@
 </head>
 
 <body class="dashboard-page">
+    <!-- Global Loading Indicator -->
+    <div id="global-loader" style="display: none; position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 9999;">
+        <div class="loading-bar" style="height: 100%; background: linear-gradient(90deg, #38bdf8, #a855f7, #38bdf8); background-size: 200% 100%; animation: shimmer 1.5s infinite;"></div>
+    </div>
+    <style>
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
+        .skeleton { background: linear-gradient(90deg, var(--color-surface) 25%, rgba(56,189,248,0.1) 50%, var(--color-surface) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 4px; }
+        .skeleton-text { height: 20px; margin: 4px 0; }
+        .skeleton-value { height: 36px; width: 120px; margin: 8px 0; }
+        .export-menu button:hover { background: rgba(56,189,248,0.1); }
+        .btn-secondary:disabled, .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .refresh-spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; background: var(--color-card); border: 1px solid var(--color-border); border-radius: 8px; z-index: 9999; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease; }
+        .toast.success { border-color: #22c55e; }
+        .toast.error { border-color: #ef4444; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+
     <!-- Sidebar Overlay for Mobile -->
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
@@ -94,15 +114,21 @@
             </nav>
 
             <div class="sidebar-footer" style="padding: 20px; border-top: 1px solid var(--color-border);">
-                <div class="user-info" style="display: flex; align-items: center; gap: 12px;">
-                    <div
+                <div class="user-info" style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                    <div id="user-avatar"
                         style="width: 32px; height: 32px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: black;">
                         N</div>
                     <div>
-                        <div style="font-size: 14px; font-weight: 600;">管理者</div>
-                        <div style="font-size: 12px; color: var(--color-text-muted);">Pro 方案</div>
+                        <div id="user-name" style="font-size: 14px; font-weight: 600;">管理者</div>
+                        <div id="user-email" style="font-size: 12px; color: var(--color-text-muted);">Pro 方案</div>
                     </div>
                 </div>
+                <button id="btn-logout" class="btn-secondary" style="width: 100%; padding: 8px; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+                    </svg>
+                    登出
+                </button>
             </div>
         </aside>
 
@@ -117,11 +143,41 @@
                         <option value="">正在載入站點...</option>
                     </select>
                 </div>
-                <div class="topbar-right" style="display: flex; gap: 12px;">
-                    <button class="btn-secondary" id="btn-export-pdf" style="padding: 8px 16px;">
-                        匯出 PDF 報表
+                <div class="topbar-right" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <!-- Date Range Selector -->
+                    <select id="date-range" class="date-select"
+                        style="background: var(--color-surface); color: white; border: 1px solid var(--color-border); padding: 8px 12px; border-radius: 8px; font-size: 12px; cursor: pointer;">
+                        <option value="7">最近 7 天</option>
+                        <option value="14">最近 14 天</option>
+                        <option value="28" selected>最近 28 天</option>
+                        <option value="90">最近 90 天</option>
+                    </select>
+                    <!-- Refresh Button -->
+                    <button class="btn-secondary" id="btn-refresh" style="padding: 8px 12px;" title="重新整理資料">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                        </svg>
                     </button>
-                    <button class="btn-primary" onclick="location.href='/auth/google'">
+                    <!-- Export Dropdown -->
+                    <div class="export-dropdown" style="position: relative;">
+                        <button class="btn-secondary" id="btn-export" style="padding: 8px 12px; display: flex; align-items: center; gap: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                            匯出
+                        </button>
+                        <div id="export-menu" class="export-menu" style="display: none; position: absolute; right: 0; top: 100%; margin-top: 4px; background: var(--color-card); border: 1px solid var(--color-border); border-radius: 8px; min-width: 140px; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                            <button id="btn-export-pdf" style="width: 100%; padding: 10px 16px; text-align: left; background: none; border: none; color: white; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 8px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                PDF 報表
+                            </button>
+                            <button id="btn-export-csv" style="width: 100%; padding: 10px 16px; text-align: left; background: none; border: none; color: white; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 8px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M3 12h18M17 17H7l5 5 5-5z"/></svg>
+                                CSV 資料
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn-primary" id="btn-reauth" style="padding: 8px 12px; font-size: 12px;">
                         重新授權
                     </button>
                 </div>

@@ -4,14 +4,21 @@
  */
 
 let trendChart = null;
+let currentSiteUrl = null;
+let currentDateRange = 28;
+let cachedData = { keywords: null, pages: null, trends: null };
 
 document.addEventListener('DOMContentLoaded', async () => {
     const { auth, googleApi, db } = window.NetFusion;
     const siteSelector = document.getElementById('site-selector');
     const connectOverlay = document.getElementById('connect-overlay');
 
-    // 0. Setup Mobile Menu
+    // 0. Setup UI Components
     setupMobileMenu();
+    setupExportDropdown();
+    setupLogoutButton();
+    setupRefreshButton();
+    setupDateRangeSelector();
 
     // 1. Check authentication state
     try {
@@ -24,11 +31,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         connectOverlay.style.display = 'none';
 
-        // Update user avatar if exists
-        const userAvatar = document.querySelector('.sidebar-footer .user-info div:first-child');
-        if (userAvatar && user.email) {
-            userAvatar.textContent = user.email.charAt(0).toUpperCase();
-        }
+        // Update user info in sidebar
+        updateUserInfo(user);
 
         // 2. Check for Google provider token
         const session = await auth.getSession();
@@ -84,22 +88,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('btn-show-keywords').addEventListener('click', () => toggleTable('keywords'));
     document.getElementById('btn-show-pages').addEventListener('click', () => toggleTable('pages'));
 
-    // 6. Handle PDF Export
-    document.getElementById('btn-export-pdf').addEventListener('click', exportToPDF);
-
-    // 7. Setup re-auth button
-    const authButtons = document.querySelectorAll('[onclick*="auth/google"]');
-    authButtons.forEach(btn => {
-        btn.onclick = async (e) => {
-            e.preventDefault();
-            try {
-                await auth.signInWithGoogle();
-            } catch (err) {
-                console.error('Auth error:', err);
-                alert('授權失敗: ' + err.message);
-            }
-        };
-    });
 });
 
 async function exportToPDF() {
@@ -159,14 +147,23 @@ function toggleTable(type) {
  * Orchestrate dashboard updates
  */
 async function updateDashboard(siteUrl) {
+    currentSiteUrl = siteUrl;
     resetUI();
+    setLoading(true);
 
-    // Fetch Data in Parallel
-    const analyticsTask = fetchAnalytics(siteUrl);
-    const trendsTask = fetchTrends(siteUrl);
-    const pagesTask = fetchPages(siteUrl);
+    try {
+        // Fetch Data in Parallel
+        const analyticsTask = fetchAnalytics(siteUrl);
+        const trendsTask = fetchTrends(siteUrl);
+        const pagesTask = fetchPages(siteUrl);
 
-    await Promise.all([analyticsTask, trendsTask, pagesTask]);
+        await Promise.all([analyticsTask, trendsTask, pagesTask]);
+    } catch (error) {
+        console.error('Dashboard update error:', error);
+        showToast('載入資料失敗', 'error');
+    } finally {
+        setLoading(false);
+    }
 }
 
 function resetUI() {
@@ -187,9 +184,14 @@ async function fetchAnalytics(siteUrl) {
     try {
         const data = await googleApi.getSearchAnalytics(siteUrl, {
             dimensions: ['query'],
-            days: 28,
+            days: currentDateRange,
             limit: 100
         });
+
+        // Cache the data for CSV export
+        if (data && data.rows) {
+            cachedData.keywords = data.rows;
+        }
 
         if (data && data.rows && data.rows.length > 0) {
             let totalClicks = 0;
@@ -267,9 +269,14 @@ async function fetchPages(siteUrl) {
     try {
         const data = await googleApi.getSearchAnalytics(siteUrl, {
             dimensions: ['page'],
-            days: 28,
+            days: currentDateRange,
             limit: 20
         });
+
+        // Cache pages data
+        if (data && data.rows) {
+            cachedData.pages = data.rows;
+        }
 
         if (data && data.rows) {
             const tableBody = document.getElementById('pages-table-body');
@@ -304,9 +311,14 @@ async function fetchTrends(siteUrl) {
     try {
         const data = await googleApi.getSearchAnalytics(siteUrl, {
             dimensions: ['date'],
-            days: 28,
-            limit: 28
+            days: currentDateRange,
+            limit: currentDateRange
         });
+
+        // Cache trends data
+        if (data && data.rows) {
+            cachedData.trends = data.rows;
+        }
 
         if (data && data.rows) {
             // Sort by date
@@ -521,4 +533,193 @@ function setupMobileMenu() {
             }
         });
     });
+}
+
+/**
+ * Setup Export Dropdown
+ */
+function setupExportDropdown() {
+    const exportBtn = document.getElementById('btn-export');
+    const exportMenu = document.getElementById('export-menu');
+    const exportPdfBtn = document.getElementById('btn-export-pdf');
+    const exportCsvBtn = document.getElementById('btn-export-csv');
+
+    if (!exportBtn || !exportMenu) return;
+
+    exportBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        exportMenu.style.display = exportMenu.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.addEventListener('click', () => {
+        exportMenu.style.display = 'none';
+    });
+
+    exportPdfBtn?.addEventListener('click', () => {
+        exportMenu.style.display = 'none';
+        exportToPDF();
+    });
+
+    exportCsvBtn?.addEventListener('click', () => {
+        exportMenu.style.display = 'none';
+        exportToCSV();
+    });
+}
+
+/**
+ * Setup Logout Button
+ */
+function setupLogoutButton() {
+    const logoutBtn = document.getElementById('btn-logout');
+    const reauthBtn = document.getElementById('btn-reauth');
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await window.NetFusion.auth.signOut();
+            } catch (err) {
+                console.error('Logout error:', err);
+                showToast('登出失敗', 'error');
+            }
+        });
+    }
+
+    if (reauthBtn) {
+        reauthBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                await window.NetFusion.auth.signInWithGoogle();
+            } catch (err) {
+                console.error('Auth error:', err);
+                showToast('授權失敗: ' + err.message, 'error');
+            }
+        });
+    }
+}
+
+/**
+ * Setup Refresh Button
+ */
+function setupRefreshButton() {
+    const refreshBtn = document.getElementById('btn-refresh');
+
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', async () => {
+            if (!currentSiteUrl) return;
+
+            const icon = refreshBtn.querySelector('svg');
+            icon?.classList.add('refresh-spin');
+            refreshBtn.disabled = true;
+
+            // Clear cache and reload
+            cachedData = { keywords: null, pages: null, trends: null };
+            await updateDashboard(currentSiteUrl);
+
+            icon?.classList.remove('refresh-spin');
+            refreshBtn.disabled = false;
+            showToast('資料已更新', 'success');
+        });
+    }
+}
+
+/**
+ * Setup Date Range Selector
+ */
+function setupDateRangeSelector() {
+    const dateRange = document.getElementById('date-range');
+
+    if (dateRange) {
+        dateRange.addEventListener('change', async (e) => {
+            currentDateRange = parseInt(e.target.value);
+            if (currentSiteUrl) {
+                cachedData = { keywords: null, pages: null, trends: null };
+                await updateDashboard(currentSiteUrl);
+            }
+        });
+    }
+}
+
+/**
+ * Export to CSV
+ */
+function exportToCSV() {
+    if (!cachedData.keywords) {
+        showToast('請先載入資料', 'error');
+        return;
+    }
+
+    try {
+        const rows = [['關鍵字', '點擊', '曝光', 'CTR', '平均排名']];
+
+        cachedData.keywords.forEach(row => {
+            rows.push([
+                row.keys[0],
+                row.clicks,
+                row.impressions,
+                (row.ctr * 100).toFixed(2) + '%',
+                row.position.toFixed(1)
+            ]);
+        });
+
+        const csvContent = rows.map(r => r.map(cell => `"${cell}"`).join(',')).join('\n');
+        const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `NetFusion-Keywords-${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+        URL.revokeObjectURL(url);
+
+        showToast('CSV 匯出成功', 'success');
+    } catch (error) {
+        console.error('CSV Export Error:', error);
+        showToast('匯出失敗', 'error');
+    }
+}
+
+/**
+ * Show Toast Notification
+ */
+function showToast(message, type = 'info') {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${type === 'success' ? '#22c55e' : type === 'error' ? '#ef4444' : '#38bdf8'}" stroke-width="2">
+            ${type === 'success' ? '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' :
+              type === 'error' ? '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>' :
+              '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'}
+        </svg>
+        <span>${message}</span>
+    `;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.remove(), 3000);
+}
+
+/**
+ * Show/Hide Global Loader
+ */
+function setLoading(loading) {
+    const loader = document.getElementById('global-loader');
+    if (loader) {
+        loader.style.display = loading ? 'block' : 'none';
+    }
+}
+
+/**
+ * Update User Info in Sidebar
+ */
+function updateUserInfo(user) {
+    const avatar = document.getElementById('user-avatar');
+    const name = document.getElementById('user-name');
+    const email = document.getElementById('user-email');
+
+    if (user) {
+        if (avatar) avatar.textContent = (user.email || 'U').charAt(0).toUpperCase();
+        if (name) name.textContent = user.user_metadata?.full_name || user.email?.split('@')[0] || '用戶';
+        if (email) email.textContent = user.email || '';
+    }
 }
