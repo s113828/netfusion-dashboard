@@ -1,0 +1,13 @@
+.gcloudignore
+.git
+.gitignore
+node_modules
+.env
+.mcp.json
+*.md
+client_secret_*.json
+*.pdf
+brain/
+.agent/
+Dockerfile
+.dockerignore

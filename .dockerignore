@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+.env
+.mcp.json
+.cursorrules
+.agent/
+brain/
+*.md
+client_secret_*.json
+*.pdf
+.git
+.gitignore

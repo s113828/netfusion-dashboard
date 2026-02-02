@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetFusion Dashboard - 智能決策中心</title>
+
+    <!-- Premium Typography: Outfit + Space Grotesk + Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="landing-v2.css">
+    <link rel="stylesheet" href="dashboard-v2.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- PDF Export Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body class="dashboard-page">
+
+    <!-- Connect Overlay (Unauthorized State) -->
+    <div id="connect-overlay"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; display: flex; align-items: center; justify-content: center; text-align: center;">
+        <div class="data-card" style="max-width: 500px; padding: 40px; border-color: var(--color-primary);">
+            <div style="font-size: 64px; margin-bottom: 20px;">🛡️</div>
+            <h2 style="font-family: var(--font-display); margin-bottom: 16px;">啟動 AI 數據分析</h2>
+            <p style="color: var(--color-text-secondary); margin-bottom: 32px;">請連結您的 Google Search Console 帳戶，NetFusion
+                AI 將自動為您產出深度 SEO 診斷報告。</p>
+            <button class="btn-primary" onclick="location.href='/auth/google'" style="width: 100%; padding: 16px;">
+                立即連結 GSC 帳戶
+            </button>
+        </div>
+    </div>
+
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="logo">
+                    <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <defs>
+                            <linearGradient id="logoGradDash" x1="0" y1="0" x2="32" y2="32">
+                                <stop offset="0%" stop-color="#38bdf8" />
+                                <stop offset="100%" stop-color="#0ea5e9" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="32" height="32" rx="8" fill="url(#logoGradDash)" />
+                        <path d="M8 22V10L16 18V10" stroke="#030712" stroke-width="2.5" stroke-linecap="round"
+                            stroke-linejoin="round" fill="none" />
+                    </svg>
+                    <span class="logo-text">NetFusion</span>
+                </a>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="14" y="14" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
+                    </svg>
+                    <span>主控面板</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <span>SEO 關鍵字</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20V10M18 20V4M6 20v-4" />
+                    </svg>
+                    <span>流量報表</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.364-6.364l-.707-.707M4.05 18.05l.707.707M19.95 18.05l-.707.707" />
+                    </svg>
+                    <span>AI 決策建議</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer" style="padding: 20px; border-top: 1px solid var(--color-border);">
+                <div class="user-info" style="display: flex; align-items: center; gap: 12px;">
+                    <div
+                        style="width: 32px; height: 32px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: black;">
+                        N</div>
+                    <div>
+                        <div style="font-size: 14px; font-weight: 600;">管理者</div>
+                        <div style="font-size: 12px; color: var(--color-text-muted);">Pro 方案</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Area -->
+        <main class="main-area">
+            <header class="topbar">
+                <div class="topbar-left" style="display: flex; align-items: center; gap: 20px;">
+                    <h2 style="margin: 0; font-family: var(--font-display);">數據牆</h2>
+                    <select id="site-selector" class="date-select"
+                        style="background: var(--color-surface); color: white; border: 1px solid var(--color-border); padding: 8px 16px; border-radius: 8px; font-family: var(--font-body); cursor: pointer;">
+                        <option value="">正在載入站點...</option>
+                    </select>
+                </div>
+                <div class="topbar-right" style="display: flex; gap: 12px;">
+                    <button class="btn-secondary" id="btn-export-pdf" style="padding: 8px 16px;">
+                        匯出 PDF 報表
+                    </button>
+                    <button class="btn-primary" onclick="location.href='/auth/google'">
+                        重新授權
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- Metrics Grid -->
+                <div class="metrics-grid">
+                    <div class="data-card">
+                        <span class="card-label">總點擊次數 (Clicks)</span>
+                        <div class="card-value" id="stat-clicks">--</div>
+                        <div class="card-trend trend-up">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M5 15l7-7 7 7" />
+                            </svg>
+                            <span>GSC 同步</span>
+                        </div>
+                    </div>
+                    <div class="data-card">
+                        <span class="card-label">總曝光次數 (Impressions)</span>
+                        <div class="card-value" id="stat-impressions">--</div>
+                        <div class="card-trend trend-up">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M5 15l7-7 7 7" />
+                            </svg>
+                            <span>GSC 同步</span>
+                        </div>
+                    </div>
+                    <div class="data-card">
+                        <span class="card-label">平均排名 (Avg Position)</span>
+                        <div class="card-value" id="stat-position">--</div>
+                        <div class="card-trend" id="stat-ctr-label">
+                            <span style="color: var(--color-text-muted);">CTR: </span>
+                            <span id="stat-ctr"
+                                style="color: var(--color-primary); font-weight: bold; margin-left: 5px;">--%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Recommendations -->
+                <section class="ai-section">
+                    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 24px;">
+                        <img src="cyber_feature.webp" alt="AI System"
+                            style="width: 64px; height: 64px; border-radius: 12px; border: 1px solid var(--color-border-hover); box-shadow: var(--shadow-glow);">
+                        <div class="ai-header" style="margin-bottom: 0; flex: 1;">
+                            <h3 style="margin: 0; font-family: var(--font-display);">💡 NetFusion AI 策略建議</h3>
+                            <span class="rec-badge badge-high"
+                                style="background: rgba(56, 189, 248, 0.1); color: var(--color-primary);">3
+                                個高優先行動</span>
+                        </div>
+                    </div>
+
+                    <div class="recommendations-list">
+                        <div class="rec-card">
+                            <div class="rec-info">
+                                <h4 style="margin: 0 0 4px 0;">關鍵字排名優化機會</h4>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 14px;">關鍵字「行銷自動化」排名第
+                                    11，優化 Meta Title 可顯著提升點擊率。</p>
+                            </div>
+                            <button class="btn-secondary" style="padding: 8px 16px;">立即應用</button>
+                        </div>
+                        <div class="rec-card" style="border-left-color: var(--color-secondary);">
+                            <div class="rec-info">
+                                <h4 style="margin: 0 0 4px 0;">內容長度不足警告</h4>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 14px;">頁面
+                                    /blog/seo-tips 內容少於 500 字，建議擴增以獲得更高權重。</p>
+                            </div>
+                            <button class="btn-secondary" style="padding: 8px 16px;">撰寫建議</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Chart Placeholder -->
+                <div class="chart-container">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h3 style="margin: 0; font-family: var(--font-display);">搜尋流量趨勢</h3>
+                        <div style="font-size: 12px; color: var(--color-text-muted);">
+                            <span
+                                style="display: inline-block; width: 10px; height: 10px; background: var(--color-primary); margin-right: 4px;"></span>
+                            總點擊數
+                        </div>
+                    </div>
+                    <div style="height: 300px; position: relative;">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Keywords & Pages Section -->
+                <div class="data-card" style="margin-top: 24px; width: 100%; overflow: hidden;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="margin: 0; font-family: var(--font-display);">競爭力分析</h3>
+                        <div class="tab-buttons" style="display: flex; gap: 10px;">
+                            <button id="btn-show-keywords" class="btn-primary"
+                                style="padding: 6px 12px; font-size: 12px;">熱門關鍵字</button>
+                            <button id="btn-show-pages" class="btn-secondary"
+                                style="padding: 6px 12px; font-size: 12px;">熱門頁面</button>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table" id="keywords-table">
+                            <thead>
+                                <tr>
+                                    <th>關鍵字 (Query)</th>
+                                    <th>點擊</th>
+                                    <th>CTR</th>
+                                    <th>平均排名</th>
+                                </tr>
+                            </thead>
+                            <tbody id="keywords-table-body">
+                                <tr>
+                                    <td colspan="4" style="padding: 20px; text-align: center;">載入中...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="data-table" id="pages-table" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>網頁路徑 (Page URL)</th>
+                                    <th>點擊</th>
+                                    <th>曝光</th>
+                                    <th>平均排名</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pages-table-body">
+                                <tr>
+                                    <td colspan="4" style="padding: 20px; text-align: center;">載入中...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="dashboard-app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "netfusion-seo-backend",
+  "version": "1.0.0",
+  "description": "NetFusion SEO Automation Backend API",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "googleapis": "^131.0.0",
+    "@google-analytics/data": "^4.3.0",
+    "node-fetch": "^3.3.2",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": ["seo", "automation", "analytics", "gsc", "ga4"],
+  "author": "NetFusion",
+  "license": "MIT"
+}

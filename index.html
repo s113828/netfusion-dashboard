@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Automation - 決策導向的 SEO 自動化系統</title>
+    <meta name="description" content="資料收集、系統判斷、建議行動、成效回測。透過自動化流程降低 SEO 決策風險。">
+
+    <!-- Premium Typography: Noto Sans TC + DM Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="landing-v2.css">
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <defs>
+                        <linearGradient id="logoGradNav" x1="0" y1="0" x2="32" y2="32">
+                            <stop offset="0%" stop-color="#38bdf8" />
+                            <stop offset="100%" stop-color="#0ea5e9" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="32" height="32" rx="8" fill="url(#logoGradNav)" />
+                    <path d="M8 22V10L16 18V10" stroke="#030712" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" fill="none" />
+                    <circle cx="24" cy="10" r="2" fill="#030712" />
+                    <circle cx="24" cy="22" r="2" fill="#030712" />
+                    <path d="M16 18L24 10M16 18L24 22" stroke="#030712" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+                <span class="logo-text">NetFusion</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="#features">功能</a>
+                <a href="#pricing">方案</a>
+                <a href="services.html">服務</a>
+                <a href="#testimonials">客戶評價</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="/auth/google" class="btn-primary" style="background: var(--gradient-primary); border: none;">串接
+                    GSC</a>
+                <a href="login.html" class="btn-ghost">登入</a>
+            </div>
+
+            <button class="mobile-menu" aria-label="開啟選單">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="glow glow-1"></div>
+            <div class="glow glow-2"></div>
+            <div class="glow glow-3"></div>
+            <div class="grid-pattern"></div>
+        </div>
+
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="status-dot"></span>
+                    <span>系統運作中</span>
+                </div>
+
+                <h1 class="hero-title">
+                    <span class="gradient-text">智能數據分析</span><br>
+                    驅動精準決策
+                </h1>
+
+                <p class="hero-description">
+                    資料收集 → 系統分析 → 建議行動 → 成效回測<br>
+                    整合 GSC、GA、DataForSEO 數據，自動化 SEO 決策流程
+                </p>
+
+                <div class="hero-cta">
+                    <a href="register.html" class="btn-cta btn-large">
+                        <span>開始使用</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                    <a href="/auth/google" class="btn-primary btn-large">
+                        <span>串接 Search Console</span>
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-value">3</span>
+                        <span class="stat-label">資料來源</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">每日</span>
+                        <span class="stat-label">自動同步</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">24hr</span>
+                        <span class="stat-label">內提供建議</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <!-- Hero Dashboard Image -->
+                <img src="cyber_hero.webp" alt="NetFusion 智能儀表板" class="dashboard-image"
+                    style="width: 100%; border-radius: var(--radius-2xl); border: 1px solid var(--color-border); box-shadow: var(--shadow-card);">
+
+                <!-- Floating Feature Card -->
+                <div class="hero-floating-card" style="position: absolute; bottom: 20px; right: -20px; background: rgba(5,5,5,0.95); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 16px 20px; backdrop-filter: blur(10px);">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#030712" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; color: var(--color-text-muted);">排名提升</div>
+                            <div style="font-size: 18px; font-weight: bold; color: #22c55e;">+12.5%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshot Showcase Section -->
+    <section class="showcase-section" style="padding: var(--space-4xl) 0; background: linear-gradient(180deg, transparent, rgba(56, 189, 248, 0.02), transparent);">
+        <div class="container">
+            <div class="section-header" style="margin-bottom: var(--space-3xl);">
+                <span class="section-badge">系統截圖</span>
+                <h2 class="section-title">一覽<span class="gradient-text">強大功能</span></h2>
+                <p class="section-description">直覺化介面，讓數據分析變得簡單</p>
+            </div>
+
+            <div class="showcase-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-lg);">
+                <div class="showcase-item" style="position: relative; overflow: hidden; border-radius: var(--radius-xl); border: 1px solid var(--color-border); transition: all 0.3s ease;">
+                    <img src="cyber_analytics.webp" alt="數據分析" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: var(--space-lg); background: var(--color-card);">
+                        <h4 style="margin: 0 0 8px 0; font-size: 16px;">即時數據分析</h4>
+                        <p style="margin: 0; font-size: 14px; color: var(--color-text-muted);">GSC、GA4 數據一目瞭然</p>
+                    </div>
+                </div>
+
+                <div class="showcase-item" style="position: relative; overflow: hidden; border-radius: var(--radius-xl); border: 1px solid var(--color-border); transition: all 0.3s ease;">
+                    <img src="cyber_feature.webp" alt="AI 建議" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: var(--space-lg); background: var(--color-card);">
+                        <h4 style="margin: 0 0 8px 0; font-size: 16px;">AI 智能建議</h4>
+                        <p style="margin: 0; font-size: 14px; color: var(--color-text-muted);">根據數據自動生成行動建議</p>
+                    </div>
+                </div>
+
+                <div class="showcase-item" style="position: relative; overflow: hidden; border-radius: var(--radius-xl); border: 1px solid var(--color-border); transition: all 0.3s ease;">
+                    <img src="neon_analytics.webp" alt="趨勢圖表" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: var(--space-lg); background: var(--color-card);">
+                        <h4 style="margin: 0 0 8px 0; font-size: 16px;">視覺化趨勢</h4>
+                        <p style="margin: 0; font-size: 14px; color: var(--color-text-muted);">流量與排名趨勢一覽無遺</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Old Hero Visual SVG (hidden, kept for reference) -->
+    <section style="display: none;">
+        <div>
+            <svg class="dashboard-image-old" viewBox="0 0 600 450"
+                    style="background: #050505; border-radius: var(--radius-2xl); border: 1px solid var(--color-border);">
+                    <defs>
+                        <linearGradient id="nodeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#38bdf8" />
+                            <stop offset="100%" stop-color="#0ea5e9" />
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                            <feMerge>
+                                <feMergeNode in="coloredBlur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                        <filter id="glowStrong">
+                            <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+                            <feMerge>
+                                <feMergeNode in="coloredBlur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    </defs>
+
+                    <!-- Grid Background -->
+                    <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(56, 189, 248, 0.08)" stroke-width="0.5" />
+                    </pattern>
+                    <rect width="100%" height="100%" fill="url(#gridPattern)" />
+
+                    <!-- Connection Lines -->
+                    <g stroke="rgba(56, 189, 248, 0.3)" stroke-width="1" fill="none">
+                        <line x1="100" y1="100" x2="250" y2="150" />
+                        <line x1="250" y1="150" x2="400" y2="100" />
+                        <line x1="250" y1="150" x2="300" y2="280" />
+                        <line x1="100" y1="300" x2="250" y2="150" />
+                        <line x1="300" y1="280" x2="500" y2="250" />
+                        <line x1="400" y1="100" x2="500" y2="250" />
+                        <line x1="100" y1="300" x2="300" y2="280" />
+                        <line x1="300" y1="280" x2="450" y2="380" />
+                        <line x1="150" y1="200" x2="250" y2="150" />
+                        <line x1="350" y1="200" x2="400" y2="100" />
+                    </g>
+
+                    <!-- Active Connection Lines -->
+                    <g stroke="url(#nodeGrad)" stroke-width="2" fill="none" filter="url(#glow)">
+                        <line x1="250" y1="150" x2="300" y2="280" opacity="0.8">
+                            <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite" />
+                        </line>
+                        <line x1="300" y1="280" x2="500" y2="250" opacity="0.6">
+                            <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2.5s" repeatCount="indefinite" />
+                        </line>
+                    </g>
+
+                    <!-- Main Nodes -->
+                    <g filter="url(#glowStrong)">
+                        <!-- Central Hub Node -->
+                        <circle cx="300" cy="280" r="20" fill="#050505" stroke="url(#nodeGrad)" stroke-width="3" />
+                        <circle cx="300" cy="280" r="8" fill="url(#nodeGrad)">
+                            <animate attributeName="r" values="8;10;8" dur="2s" repeatCount="indefinite" />
+                        </circle>
+
+                        <!-- Secondary Nodes -->
+                        <circle cx="250" cy="150" r="14" fill="#050505" stroke="#38bdf8" stroke-width="2" />
+                        <circle cx="250" cy="150" r="5" fill="#38bdf8" />
+
+                        <circle cx="400" cy="100" r="12" fill="#050505" stroke="#38bdf8" stroke-width="2" />
+                        <circle cx="400" cy="100" r="4" fill="#38bdf8" />
+
+                        <circle cx="500" cy="250" r="14" fill="#050505" stroke="#0ea5e9" stroke-width="2" />
+                        <circle cx="500" cy="250" r="5" fill="#0ea5e9" />
+
+                        <circle cx="100" cy="100" r="10" fill="#050505" stroke="#38bdf8" stroke-width="1.5" />
+                        <circle cx="100" cy="100" r="3" fill="#38bdf8" />
+
+                        <circle cx="100" cy="300" r="12" fill="#050505" stroke="#38bdf8" stroke-width="2" />
+                        <circle cx="100" cy="300" r="4" fill="#38bdf8" />
+
+                        <circle cx="450" cy="380" r="10" fill="#050505" stroke="#0ea5e9" stroke-width="1.5" />
+                        <circle cx="450" cy="380" r="3" fill="#0ea5e9" />
+
+                        <!-- Small Accent Nodes -->
+                        <circle cx="150" cy="200" r="6" fill="#050505" stroke="#38bdf8" stroke-width="1" />
+                        <circle cx="350" cy="200" r="6" fill="#050505" stroke="#38bdf8" stroke-width="1" />
+                        <circle cx="200" cy="350" r="5" fill="#050505" stroke="#0ea5e9" stroke-width="1" />
+                    </g>
+
+                    <!-- Data Flow Particles -->
+                    <g fill="#38bdf8" filter="url(#glow)">
+                        <circle r="3">
+                            <animateMotion dur="3s" repeatCount="indefinite">
+                                <mpath href="#path1" />
+                            </animateMotion>
+                        </circle>
+                        <circle r="2">
+                            <animateMotion dur="4s" repeatCount="indefinite" begin="1s">
+                                <mpath href="#path2" />
+                            </animateMotion>
+                        </circle>
+                    </g>
+                    <path id="path1" d="M100,300 L250,150 L300,280" fill="none" stroke="none" />
+                    <path id="path2" d="M300,280 L500,250 L400,100" fill="none" stroke="none" />
+
+                    <!-- Dashboard Panel Overlay -->
+                    <rect x="340" y="120" width="220" height="140" rx="8" fill="rgba(5,5,5,0.9)"
+                        stroke="rgba(56, 189, 248, 0.3)" stroke-width="1" />
+                    <text x="360" y="150" fill="#38bdf8" font-size="12" font-family="Space Grotesk, sans-serif">SYSTEM
+                        STATUS</text>
+                    <rect x="360" y="165" width="180" height="8" rx="4" fill="rgba(56, 189, 248, 0.2)" />
+                    <rect x="360" y="165" width="140" height="8" rx="4" fill="url(#nodeGrad)">
+                        <animate attributeName="width" values="140;160;140" dur="3s" repeatCount="indefinite" />
+                    </rect>
+                    <text x="360" y="200" fill="#888" font-size="10" font-family="Outfit, sans-serif">Processing: 2,847
+                        queries</text>
+                    <text x="360" y="220" fill="#888" font-size="10" font-family="Outfit, sans-serif">Active nodes:
+                        12</text>
+                    <text x="360" y="240" fill="#38bdf8" font-size="11" font-family="Outfit, sans-serif">→ All systems
+                        operational</text>
+
+                    <!-- Pulse Rings on Central Node -->
+                    <circle cx="300" cy="280" r="25" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.5">
+                        <animate attributeName="r" values="25;50;25" dur="3s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.5;0;0.5" dur="3s" repeatCount="indefinite" />
+                    </circle>
+                </svg>
+        </div>
+    </section>
+
+    <!-- Logos Section -->
+    <section class="logos-section">
+        <div class="container">
+            <p class="logos-title">系統整合的資料來源</p>
+            <div class="logos-grid">
+                <div class="logo-item">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="2" />
+                        <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>Google Search Console</span>
+                </div>
+                <div class="logo-item">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10" />
+                        <line x1="12" y1="20" x2="12" y2="4" />
+                        <line x1="6" y1="20" x2="6" y2="14" />
+                    </svg>
+                    <span>Google Analytics</span>
+                </div>
+                <div class="logo-item">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <path d="M3 9h18M9 21V9" />
+                    </svg>
+                    <span>Google Ads</span>
+                </div>
+                <div class="logo-item">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="5" />
+                        <circle cx="12" cy="12" r="4" />
+                    </svg>
+                    <span>Meta Ads</span>
+                </div>
+                <div class="logo-item">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                    </svg>
+                    <span>DataForSEO</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">系統運作</span>
+                <h2 class="section-title"><span class="gradient-text">智能系統</span>助您精準決策</h2>
+                <p class="section-description">透過自動化流程，降低人為判斷錯誤的風險</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card featured">
+                    <div class="feature-image">
+                        <!-- Decision Dashboard SVG -->
+                        <svg viewBox="0 0 400 280" style="width: 100%; border-radius: var(--radius-lg);">
+                            <defs>
+                                <linearGradient id="featureGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#38bdf8" />
+                                    <stop offset="100%" stop-color="#0ea5e9" />
+                                </linearGradient>
+                            </defs>
+                            <rect width="100%" height="100%" fill="#0a0a0a" />
+
+                            <!-- Mini Dashboard UI -->
+                            <rect x="20" y="20" width="360" height="40" rx="6" fill="#111" stroke="rgba(56,189,248,0.2)"
+                                stroke-width="1" />
+                            <circle cx="45" cy="40" r="8" fill="#38bdf8" opacity="0.3" />
+                            <rect x="65" y="35" width="80" height="10" rx="2" fill="#222" />
+                            <rect x="300" y="32" width="60" height="16" rx="4" fill="url(#featureGrad)" opacity="0.8" />
+
+                            <!-- Data Cards -->
+                            <rect x="20" y="75" width="110" height="80" rx="8" fill="#111"
+                                stroke="rgba(56,189,248,0.15)" stroke-width="1" />
+                            <text x="35" y="100" fill="#38bdf8" font-size="10">RANKING</text>
+                            <text x="35" y="125" fill="#fff" font-size="20" font-weight="bold">+12.5%</text>
+                            <rect x="35" y="140" width="80" height="4" rx="2" fill="#222" />
+                            <rect x="35" y="140" width="55" height="4" rx="2" fill="#22c55e" />
+
+                            <rect x="145" y="75" width="110" height="80" rx="8" fill="#111"
+                                stroke="rgba(56,189,248,0.15)" stroke-width="1" />
+                            <text x="160" y="100" fill="#38bdf8" font-size="10">CTR</text>
+                            <text x="160" y="125" fill="#fff" font-size="20" font-weight="bold">4.2%</text>
+                            <rect x="160" y="140" width="80" height="4" rx="2" fill="#222" />
+                            <rect x="160" y="140" width="40" height="4" rx="2" fill="#f59e0b" />
+
+                            <rect x="270" y="75" width="110" height="80" rx="8" fill="#111"
+                                stroke="rgba(56,189,248,0.15)" stroke-width="1" />
+                            <text x="285" y="100" fill="#38bdf8" font-size="10">QUERIES</text>
+                            <text x="285" y="125" fill="#fff" font-size="20" font-weight="bold">2.8K</text>
+                            <rect x="285" y="140" width="80" height="4" rx="2" fill="#222" />
+                            <rect x="285" y="140" width="70" height="4" rx="2" fill="#38bdf8" />
+
+                            <!-- Action Items -->
+                            <rect x="20" y="170" width="360" height="90" rx="8" fill="#111"
+                                stroke="rgba(56,189,248,0.2)" stroke-width="1" />
+                            <text x="35" y="195" fill="#38bdf8" font-size="11">建議行動</text>
+                            <g fill="#888" font-size="10">
+                                <circle cx="35" cy="215" r="3" fill="#22c55e" />
+                                <text x="45" y="218">優化 "SEO 工具" 頁面標題</text>
+                                <circle cx="35" cy="235" r="3" fill="#f59e0b" />
+                                <text x="45" y="238">監控競爭對手排名變化</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                                <path d="M2 17l10 5 10-5" />
+                                <path d="M2 12l10 5 10-5" />
+                            </svg>
+                        </div>
+                        <h3>決策儀表板</h3>
+                        <p>整合 GSC、GA、DataForSEO 數據，呈現系統判斷結果與建議行動</p>
+                        <ul class="feature-list">
+                            <li>資料來源標示 (GSC / GA / DataForSEO)</li>
+                            <li>系統判斷狀態：可行 / 觀察 / 風險</li>
+                            <li>建議行動與觸發條件</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon purple">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24" />
+                        </svg>
+                    </div>
+                    <h3>自動化判斷</h3>
+                    <p>系統根據規則自動判斷，並說明觸發條件</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon green">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18" />
+                            <path d="M9 21V9" />
+                        </svg>
+                    </div>
+                    <h3>狀態報告</h3>
+                    <p>每日同步排名變化、曝光與 CTR 數據</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon amber">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                        </svg>
+                    </div>
+                    <h3>排名追蹤</h3>
+                    <p>關鍵字排名變化，觸發相應建議</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon pink">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </div>
+                    <h3>多站點管理</h3>
+                    <p>同時監控多個網站的 SEO 狀態</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon cyan">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                            <line x1="1" y1="10" x2="23" y2="10" />
+                        </svg>
+                    </div>
+                    <h3>風險標示</h3>
+                    <p>標記需要關注的排名下降或異常狀況</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Visual -->
+    <section class="analytics-section">
+        <div class="container">
+            <div class="analytics-content">
+                <div class="analytics-text">
+                    <span class="section-badge">資料流程</span>
+                    <h2>資料如何被處理</h2>
+                    <p>系統每日從各資料來源同步數據，進行分析後產生建議。所有建議都附有資料來源與觸發條件。</p>
+                    <ul class="analytics-features">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B"
+                                stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
+                            </svg>
+                            <span>GSC：排名、曝光、點擊</span>
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
+                            </svg>
+                            <span>GA4：流量、轉換、行為</span>
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
+                            </svg>
+                            <span>DataForSEO：競爭分析</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="analytics-image" style="position: relative;">
+                    <!-- Main Image -->
+                    <img src="neon_feature.webp" alt="數據流程視覺化"
+                        style="width: 100%; border-radius: var(--radius-2xl); border: 1px solid var(--color-border);">
+
+                    <!-- Floating Stats Cards -->
+                    <div style="position: absolute; top: 20px; left: 20px; background: rgba(5,5,5,0.9); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 12px 16px; backdrop-filter: blur(10px);">
+                        <div style="font-size: 11px; color: var(--color-text-muted); margin-bottom: 4px;">GSC 資料</div>
+                        <div style="font-size: 16px; font-weight: bold; color: #38bdf8;">2,847 查詢</div>
+                    </div>
+
+                    <div style="position: absolute; bottom: 20px; right: 20px; background: rgba(5,5,5,0.9); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 12px 16px; backdrop-filter: blur(10px);">
+                        <div style="font-size: 11px; color: var(--color-text-muted); margin-bottom: 4px;">系統建議</div>
+                        <div style="font-size: 16px; font-weight: bold; color: #22c55e;">5 項行動</div>
+                    </div>
+                </div>
+
+                <!-- Hidden: Old SVG kept for reference -->
+                <div style="display: none;">
+                    <svg viewBox="0 0 500 400">
+                        <defs>
+                            <linearGradient id="analyticsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#38bdf8" />
+                                <stop offset="100%" stop-color="#0ea5e9" />
+                            </linearGradient>
+                        </defs>
+                        <pattern id="analyticsGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+                            <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(56, 189, 248, 0.06)"
+                                stroke-width="0.5" />
+                        </pattern>
+                        <rect width="100%" height="100%" fill="url(#analyticsGrid)" />
+
+                        <!-- Data Source Nodes -->
+                        <g filter="url(#analyticGlow)">
+                            <!-- GSC Node -->
+                            <circle cx="80" cy="100" r="35" fill="#0a0a0a" stroke="#38bdf8" stroke-width="2" />
+                            <text x="80" y="105" fill="#38bdf8" font-size="11" text-anchor="middle"
+                                font-weight="bold">GSC</text>
+                            <circle cx="80" cy="100" r="40" fill="none" stroke="#38bdf8" opacity="0.3">
+                                <animate attributeName="r" values="40;50;40" dur="3s" repeatCount="indefinite" />
+                                <animate attributeName="opacity" values="0.3;0;0.3" dur="3s" repeatCount="indefinite" />
+                            </circle>
+
+                            <!-- GA Node -->
+                            <circle cx="80" cy="200" r="35" fill="#0a0a0a" stroke="#22c55e" stroke-width="2" />
+                            <text x="80" y="205" fill="#22c55e" font-size="11" text-anchor="middle"
+                                font-weight="bold">GA4</text>
+
+                            <!-- DataForSEO Node -->
+                            <circle cx="80" cy="300" r="35" fill="#0a0a0a" stroke="#f59e0b" stroke-width="2" />
+                            <text x="80" y="305" fill="#f59e0b" font-size="10" text-anchor="middle"
+                                font-weight="bold">DataFor</text>
+                        </g>
+
+                        <!-- Data Flow Lines -->
+                        <g stroke-width="2" fill="none">
+                            <path d="M115,100 Q180,100 250,200" stroke="url(#analyticsGrad)" opacity="0.5" />
+                            <path d="M115,200 L250,200" stroke="#22c55e" opacity="0.5" />
+                            <path d="M115,300 Q180,300 250,200" stroke="#f59e0b" opacity="0.5" />
+                        </g>
+
+                        <!-- Central Processing Hub -->
+                        <g filter="url(#analyticGlow)">
+                            <circle cx="250" cy="200" r="45" fill="#0a0a0a" stroke="url(#analyticsGrad)"
+                                stroke-width="3" />
+                            <text x="250" y="195" fill="#38bdf8" font-size="10" text-anchor="middle">系統分析</text>
+                            <text x="250" y="210" fill="#fff" font-size="8" text-anchor="middle">AI Processing</text>
+                            <circle cx="250" cy="200" r="50" fill="none" stroke="#38bdf8" opacity="0.2">
+                                <animate attributeName="r" values="50;65;50" dur="4s" repeatCount="indefinite" />
+                                <animate attributeName="opacity" values="0.2;0;0.2" dur="4s" repeatCount="indefinite" />
+                            </circle>
+                        </g>
+
+                        <!-- Output Lines -->
+                        <g stroke="url(#analyticsGrad)" stroke-width="2" fill="none" opacity="0.5">
+                            <path d="M295,200 L380,120" />
+                            <path d="M295,200 L380,200" />
+                            <path d="M295,200 L380,280" />
+                        </g>
+
+                        <!-- Output Nodes -->
+                        <g>
+                            <!-- Actionable Insights -->
+                            <rect x="380" y="90" width="100" height="60" rx="8" fill="#0a0a0a" stroke="#38bdf8"
+                                stroke-width="1.5" />
+                            <text x="430" y="115" fill="#38bdf8" font-size="9" text-anchor="middle">建議行動</text>
+                            <rect x="395" y="125" width="70" height="6" rx="3" fill="#111" />
+                            <rect x="395" y="125" width="50" height="6" rx="3" fill="#38bdf8">
+                                <animate attributeName="width" values="50;65;50" dur="2s" repeatCount="indefinite" />
+                            </rect>
+
+                            <!-- Risk Alerts -->
+                            <rect x="380" y="170" width="100" height="60" rx="8" fill="#0a0a0a" stroke="#f59e0b"
+                                stroke-width="1.5" />
+                            <text x="430" y="195" fill="#f59e0b" font-size="9" text-anchor="middle">風險標示</text>
+                            <circle cx="410" cy="215" r="4" fill="#f59e0b" />
+                            <rect x="420" y="212" width="45" height="6" rx="3" fill="#222" />
+
+                            <!-- Reports -->
+                            <rect x="380" y="250" width="100" height="60" rx="8" fill="#0a0a0a" stroke="#22c55e"
+                                stroke-width="1.5" />
+                            <text x="430" y="275" fill="#22c55e" font-size="9" text-anchor="middle">狀態報告</text>
+                            <rect x="395" y="285" width="70" height="6" rx="3" fill="#111" />
+                            <rect x="395" y="285" width="55" height="6" rx="3" fill="#22c55e" />
+                        </g>
+
+                        <!-- Floating Data Particles -->
+                        <g fill="#38bdf8">
+                            <circle r="3">
+                                <animateMotion dur="2s" repeatCount="indefinite" path="M115,100 Q180,100 250,200" />
+                            </circle>
+                            <circle r="3" fill="#22c55e">
+                                <animateMotion dur="2.5s" repeatCount="indefinite" path="M115,200 L250,200"
+                                    begin="0.5s" />
+                            </circle>
+                            <circle r="3" fill="#f59e0b">
+                                <animateMotion dur="3s" repeatCount="indefinite" path="M115,300 Q180,300 250,200"
+                                    begin="1s" />
+                            </circle>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">方案</span>
+                <h2 class="section-title">選擇<span class="gradient-text">適合的方案</span></h2>
+                <p class="section-description">依據監控站點數量與資料來源選擇</p>
+            </div>
+
+            <div class="pricing-toggle">
+                <span class="toggle-label active">月繳</span>
+                <label class="toggle">
+                    <input type="checkbox" id="pricingToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">年繳 <span class="save-badge">省 20%</span></span>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>基礎版</h3>
+                        <p>1 個站點監控</p>
+                    </div>
+                    <div class="pricing-price">
+                        <span class="price-currency">$</span>
+                        <span class="price-amount" data-monthly="49" data-yearly="39">49</span>
+                        <span class="price-period">/月</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> 1 個廣告帳號</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> 每日報表</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> 基礎 AI 建議</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> Email 通知</li>
+                        <li class="disabled"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="#4B5563" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg> 多客戶管理</li>
+                        <li class="disabled"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="#4B5563" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg> 白標報表</li>
+                    </ul>
+                    <a href="register.html" class="btn-secondary btn-full">開始免費試用</a>
+                </div>
+
+                <div class="pricing-card popular">
+                    <div class="popular-badge">最受歡迎</div>
+                    <div class="pricing-header">
+                        <h3>標準版</h3>
+                        <p>5 個站點監控</p>
+                    </div>
+                    <div class="pricing-price">
+                        <span class="price-currency">$</span>
+                        <span class="price-amount" data-monthly="149" data-yearly="119">149</span>
+                        <span class="price-period">/月</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> 5 個廣告帳號</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> 每日報表 + 週報</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> 進階 AI 建議</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> Email + Slack 通知</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> 多客戶管理</li>
+                        <li class="disabled"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="#4B5563" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg> 白標報表</li>
+                    </ul>
+                    <a href="register.html" class="btn-cta btn-full">開始免費試用</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>企業版</h3>
+                        <p>無限站點監控</p>
+                    </div>
+                    <div class="pricing-price">
+                        <span class="price-currency">$</span>
+                        <span class="price-amount" data-monthly="399" data-yearly="319">399</span>
+                        <span class="price-period">/月</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> 無限廣告帳號</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> 完整報表套件</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> GPT-4 AI 建議</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> 全渠道通知</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> 多客戶管理</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg> 白標報表</li>
+                    </ul>
+                    <a href="register.html" class="btn-secondary btn-full">聯繫銷售</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">使用案例</span>
+                <h2 class="section-title">導入後的改變</h2>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p>「導入系統後，SEO 決策從依賴個人經驗變成有數據依據的流程。排名異常時系統會主動標示，減少人為疏漏。」</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">陳</div>
+                        <div class="author-info">
+                            <span class="author-name">陳志明</span>
+                            <span class="author-title">數位行銷總監 @ ABC 公司</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <p>「以前要花半天彙整各平台數據，現在系統每天自動同步，我只需要看建議行動清單。」</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">林</div>
+                        <div class="author-info">
+                            <span class="author-name">林小芬</span>
+                            <span class="author-title">創辦人 @ 電商品牌</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <p>「系統的建議都會說明觸發原因和資料來源，這讓我更容易跟客戶解釋為什麼要做這個調整。」</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">王</div>
+                        <div class="author-info">
+                            <span class="author-name">王大維</span>
+                            <span class="author-title">執行長 @ 數位行銷代理商</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2><span class="gradient-text">開始使用系統</span></h2>
+                <p>連結您的資料來源，系統會在 24 小時內產生第一份建議</p>
+                <div class="cta-actions">
+                    <a href="register.html" class="btn-cta btn-large">
+                        開始設定
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                    <a href="services.html" class="btn-primary btn-large">查看系統說明</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <defs>
+                                <linearGradient id="logoGradFooter" x1="0" y1="0" x2="32" y2="32">
+                                    <stop offset="0%" stop-color="#38bdf8" />
+                                    <stop offset="100%" stop-color="#0ea5e9" />
+                                </linearGradient>
+                            </defs>
+                            <rect width="32" height="32" rx="8" fill="url(#logoGradFooter)" />
+                            <path d="M8 22V10L16 18V10" stroke="#030712" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round" fill="none" />
+                            <circle cx="24" cy="10" r="2" fill="#030712" />
+                            <circle cx="24" cy="22" r="2" fill="#030712" />
+                            <path d="M16 18L24 10M16 18L24 22" stroke="#030712" stroke-width="1.5"
+                                stroke-linecap="round" />
+                        </svg>
+                        <span class="logo-text">NetFusion</span>
+                    </a>
+                    <p>決策導向的 SEO 自動化系統</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>產品</h4>
+                    <a href="#features">功能</a>
+                    <a href="#pricing">定價</a>
+                    <a href="services.html">服務</a>
+                </div>
+
+                <div class="footer-links">
+                    <h4>公司</h4>
+                    <a href="#">關於我們</a>
+                    <a href="#">聯絡我們</a>
+                    <a href="#">部落格</a>
+                </div>
+
+                <div class="footer-links">
+                    <h4>法律</h4>
+                    <a href="privacy.html">隱私權政策</a>
+                    <a href="terms.html">服務條款</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 NetFusion. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="landing.js"></script>
+    <script src="js/supabase.js"></script>
+    <script>
+        // Handle login buttons
+        document.addEventListener('DOMContentLoaded', async () => {
+            const { auth } = window.NetFusion;
+
+            // Check if already logged in
+            const user = await auth.getUser();
+            if (user) {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            // Setup all login buttons
+            document.querySelectorAll('a[href="/auth/google"], a[href="login.html"]').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    try {
+                        await auth.signInWithGoogle();
+                    } catch (err) {
+                        console.error('Login error:', err);
+                        alert('登入失敗，請重試');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

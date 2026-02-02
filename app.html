@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>儀表板 - NetFusion</title>
+    <meta name="description" content="NetFusion SEO 自動化系統儀表板">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="landing-v2.css">
+    <link rel="stylesheet" href="app.css">
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body class="dashboard-page">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">
+                <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32">
+                            <stop offset="0%" stop-color="#38bdf8"/>
+                            <stop offset="100%" stop-color="#0ea5e9"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="32" height="32" rx="8" fill="url(#logoGrad)"/>
+                    <path d="M8 22V10L16 18V10" stroke="#030712" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <circle cx="24" cy="10" r="2" fill="#030712"/>
+                    <circle cx="24" cy="22" r="2" fill="#030712"/>
+                    <path d="M16 18L24 10M16 18L24 22" stroke="#030712" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span class="logo-text">NetFusion</span>
+            </a>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+                <span>總覽</span>
+            </a>
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="M21 21l-4.35-4.35"/>
+                </svg>
+                <span>搜尋分析</span>
+            </a>
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+                <span>流量分析</span>
+            </a>
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                <span>競爭分析</span>
+            </a>
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                <span>報告</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                <span>設定</span>
+            </a>
+            <button class="nav-item logout-btn" onclick="api.logout()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                <span>登出</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1>儀表板</h1>
+                <p>系統判斷與建議總覽</p>
+            </div>
+            <div class="header-right">
+                <div id="sync-status" class="sync-status-mini"></div>
+                <div class="user-menu">
+                    <div class="user-avatar">N</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Loading Overlay -->
+        <div id="dashboard-loader" class="dashboard-loader">
+            <div class="loader-spinner"></div>
+            <p>載入中...</p>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboard-content" class="dashboard-content">
+            <!-- Overview Metrics -->
+            <section class="dashboard-section">
+                <h2 class="section-title">概覽指標</h2>
+                <div id="overview-metrics" class="metrics-grid"></div>
+            </section>
+
+            <!-- Trends -->
+            <section class="dashboard-section">
+                <h2 class="section-title">趨勢變化 <span class="period-badge">過去 28 天</span></h2>
+                <div id="trends-grid" class="trends-grid"></div>
+            </section>
+
+            <!-- Two Column Layout -->
+            <div class="two-column">
+                <!-- Recommendations -->
+                <section class="dashboard-section">
+                    <div class="section-header-row">
+                        <h2 class="section-title">系統建議</h2>
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" data-filter="all">全部</button>
+                            <button class="filter-tab" data-filter="actionable">可行動</button>
+                            <button class="filter-tab" data-filter="watch">觀察</button>
+                            <button class="filter-tab" data-filter="risk">風險</button>
+                        </div>
+                    </div>
+                    <div id="recommendations-list" class="recommendations-list"></div>
+                </section>
+
+                <!-- Top Queries -->
+                <section class="dashboard-section">
+                    <h2 class="section-title">熱門查詢</h2>
+                    <div id="top-queries" class="top-queries"></div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/supabase.js"></script>
+    <script>
+        // Auth state handling
+        document.addEventListener('DOMContentLoaded', async () => {
+            const { auth } = window.NetFusion;
+
+            // Check auth state
+            const user = await auth.getUser();
+
+            if (!user) {
+                // Redirect to login
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Update user avatar
+            const avatar = document.querySelector('.user-avatar');
+            if (avatar && user.email) {
+                avatar.textContent = user.email.charAt(0).toUpperCase();
+            }
+
+            // Setup logout button
+            const logoutBtn = document.querySelector('.logout-btn');
+            if (logoutBtn) {
+                logoutBtn.onclick = () => auth.signOut();
+            }
+
+            // Load dashboard data
+            console.log('User logged in:', user.email);
+
+            // Try to get GSC data
+            try {
+                const session = await auth.getSession();
+                if (session?.provider_token) {
+                    console.log('Google token available, can fetch GSC data');
+                }
+            } catch (err) {
+                console.error('Error getting session:', err);
+            }
+        });
+    </script>
+</body>
+
+</html>

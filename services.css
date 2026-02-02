@@ -1,0 +1,278 @@
+/* ==========================================
+   Services Page Styles
+   ========================================== */
+
+.services-hero {
+    position: relative;
+    padding: 160px 0 80px;
+    overflow: hidden;
+}
+
+.services-hero .section-title {
+    font-size: clamp(36px, 5vw, 56px);
+}
+
+/* Services Grid */
+.services-section {
+    padding: 0 0 120px;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.service-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.service-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.service-card.featured {
+    grid-row: span 2;
+    background: var(--gradient-subtle);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.service-icon {
+    padding: 32px 32px 0;
+}
+
+.service-icon svg {
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--accent);
+}
+
+.service-icon.google svg {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.service-icon.meta svg {
+    background: rgba(168, 85, 247, 0.15);
+    color: #a855f7;
+}
+
+.service-icon.analytics svg {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+.service-content {
+    padding: 24px 32px 32px;
+}
+
+.service-content h3 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.service-content>p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+
+.service-features {
+    list-style: none;
+    margin-bottom: 24px;
+}
+
+.service-features li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+}
+
+.service-features li:last-child {
+    border-bottom: none;
+}
+
+.service-features .check {
+    width: 20px;
+    height: 20px;
+    background: rgba(34, 197, 94, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--success);
+    font-size: 12px;
+}
+
+.service-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: var(--bg-elevated);
+    border-radius: var(--radius-md);
+}
+
+.price-label {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-right: 8px;
+}
+
+.price-value {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.price-period {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* Process Section */
+.process-section {
+    padding: 120px 0;
+    background: var(--bg-secondary);
+}
+
+.process-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.process-step {
+    flex: 1;
+    min-width: 200px;
+    max-width: 250px;
+    text-align: center;
+    padding: 32px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-normal);
+}
+
+.process-step:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+}
+
+.step-number {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+}
+
+.process-step h4 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.process-step p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.process-connector {
+    color: var(--accent);
+    opacity: 0.5;
+}
+
+/* FAQ Section */
+.faq-section {
+    padding: 120px 0;
+}
+
+.faq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: all var(--transition-normal);
+}
+
+.faq-item:hover {
+    border-color: var(--border-hover);
+}
+
+.faq-item h4 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.faq-item p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+/* ==========================================
+   Responsive
+   ========================================== */
+
+@media (max-width: 1024px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .service-card.featured {
+        grid-row: auto;
+    }
+
+    .process-connector {
+        display: none;
+    }
+
+    .faq-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .process-grid {
+        flex-direction: column;
+    }
+
+    .process-step {
+        max-width: 100%;
+    }
+}

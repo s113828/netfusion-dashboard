@@ -1,0 +1,19 @@
+# Cursor Rules for NetFusion
+
+## MCP Tools Integration
+This project is equipped with MCP services for advanced capabilities:
+- **Flux Image Generation**: Use `replicate-flux-mcp` to create theme-consistent 3D assets.
+- **Gemini Intelligence**: Use `nanobanana` for deep data analysis or alternative LLM reasoning.
+
+## Design Standards: Cyber Blue
+- Always use the **Cyber Blue** palette defined in `landing-v2.css`.
+- Core Primary: `#38bdf8`
+- Dark Background: `#000000`
+- Icons: Use the provided SVG animation patterns instead of external images where possible.
+
+## Project Context
+- **Framework**: Node.js + Vanilla JS/HTML/CSS.
+- **Key Files**: 
+  - `landing-v2.css`: Global design tokens.
+  - `dashboard-v2.html`: Main admin interface.
+  - `.mcp.json`: Local tool configuration.
