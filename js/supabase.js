@@ -21,7 +21,7 @@ const auth = {
       provider: 'google',
       options: {
         scopes: 'https://www.googleapis.com/auth/webmasters.readonly https://www.googleapis.com/auth/analytics.readonly',
-        redirectTo: window.location.origin + '/app.html'
+        redirectTo: window.location.origin + '/dashboard.html'
       }
     });
     if (error) throw error;
